@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 
 import getValidationsErrors from '../../utils/getValidationserrors';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../hooks/toast';
 
 import logoImage from '../../assets/logo.svg';
 
@@ -23,38 +24,42 @@ const Signin: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const { signIn, user } = useAuth();
+  const { addToast } = useToast();
 
   console.log(user);
 
-  const handleSubmit = useCallback(async (data: SiginFormData) => {
-    formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SiginFormData) => {
+      formRef.current?.setErrors({});
 
-    try {
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um E-mail valido'),
-        password: Yup.string().required('Senha Obrigatoia'),
-      });
+      try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um E-mail valido'),
+          password: Yup.string().required('Senha Obrigatoia'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      signIn({
-        email: data.email,
-        password: data.password,
-      });
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationsErrors(err);
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationsErrors(err);
 
-        formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors);
+        }
+
+        addToast();
       }
-
-      // disparar um tost
-    }
-  }, []);
+    },
+    [signIn, addToast],
+  );
 
   return (
     <Container>
