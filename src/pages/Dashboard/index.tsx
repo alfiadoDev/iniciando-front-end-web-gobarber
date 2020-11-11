@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
             <div>
               <span>Bem-vindo,</span>
               <Link to="/profile">
-                <strong>Alfiado Ngana</strong>
+                <strong>{user.name}</strong>
               </Link>
             </div>
           </Profile>
