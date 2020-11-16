@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import SignIn from '../../pages/Signin';
+import Signin from '../../pages/Signin';
 
 jest.mock('react-router-dom', () => {
   return {
@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => {
 
 describe('Signin Page', () => {
   it('it should be able to signin', () => {
-    const { debug } = render(<SignIn />);
+    const { debug } = render(<Signin />);
 
     debug();
   });
